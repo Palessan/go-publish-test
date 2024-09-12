@@ -1,4 +1,4 @@
-package mafematitian
+package maf
 
 import (
 	"image"

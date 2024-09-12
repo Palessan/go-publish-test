@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	maf "github.com/palessan/go-publish-test/mafematitian"
 
+	"github.com/palessan/go-publish-test/maf"
 )
-
 
 func main() {
 	fmt.Println(maf.Min(10, 20))

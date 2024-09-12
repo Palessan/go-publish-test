@@ -4,7 +4,7 @@ import (
 	"math"
 	"testing"
 
-	maf "github.com/palessan/go-publish-test/mafematitian"
+	"github.com/palessan/go-publish-test/maf"
 )
 
 // assertEqual checks if expected is equal to actual, if not, it fails the test
