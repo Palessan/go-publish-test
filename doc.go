@@ -14,6 +14,6 @@
 
 // This is a test to see how publishing works and to provide the maf module
 //
-// // The maf module provides mathematical functions and transformations between geometrical 
-// // objects commonly used in game engines
+// The maf module provides mathematical functions and transformations between geometrical 
+// objects commonly used in game engines
 package main
