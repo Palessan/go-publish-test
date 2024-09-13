@@ -3,76 +3,14 @@ package maf
 import (
 	"image"
 	"math"
-	"strconv"
 	"math/rand/v2"
+
+	t "github.com/palessan/go-publish-test/util/types"
 )
 
 const (
 	SMOOTHNESS = 0.20
 )
-
-type Vector2 struct {
-	X, Y float64
-}
-
-// Rectangle type
-type RLRectangle struct {
-	X      float64
-	Y      float64
-	Width  float64
-	Height float64
-}
-
-// A Point is an X, Y coordinate pair. The axes increase right and down.
-type Point struct {
-	X, Y int
-}
-
-// String returns a string representation of p like "(3,4)".
-func (p Point) String() string {
-	return "(" + strconv.Itoa(p.X) + "," + strconv.Itoa(p.Y) + ")"
-}
-
-// A Rectangle contains the points with Min.X <= X < Max.X, Min.Y <= Y < Max.Y.
-// It is well-formed if Min.X <= Max.X and likewise for Y. Points are always
-// well-formed. A rectangle's methods always return well-formed outputs for
-// well-formed inputs.
-//
-// A Rectangle is also an [Image] whose bounds are the rectangle itself. At
-// returns color.Opaque for points in the rectangle and color.Transparent
-// otherwise.
-type Rectangle struct {
-	Min, Max Point
-}
-
-// String returns a string representation of r like "(3,4)-(6,5)".
-func (r Rectangle) String() string {
-	return r.Min.String() + "-" + r.Max.String()
-}
-
-// Dx returns r's width.
-func (r Rectangle) Dx() int {
-	return r.Max.X - r.Min.X
-}
-
-// Dy returns r's height.
-func (r Rectangle) Dy() int {
-	return r.Max.Y - r.Min.Y
-}
-
-// Size returns r's width and height.
-func (r Rectangle) Size() Point {
-	return Point{
-		r.Max.X - r.Min.X,
-		r.Max.Y - r.Min.Y,
-	}
-}
-
-func (r RLRectangle) ToImageRectangle() image.Rectangle {
-	min := image.Point{X: int(r.X), Y: int(r.Y)}
-	max := image.Point{X: int(r.X + r.Width), Y: int(r.Y + r.Height)}
-	return image.Rectangle{Min: min, Max: max}
-}
 
 // Min returns the minimum of two integers
 func Min(a, b int) int {
@@ -209,13 +147,13 @@ func WrapDegrees(angle float64) float64 {
 //    - Direction: (0, 1)
 //    - Radians: π/2 = 1.5708
 
-func VectorToDegrees(vector Vector2) float64 {
+func VectorToDegrees(vector t.Vector2) float64 {
 	return RoundTo4(DegreesFromRadians(float64(math.Atan2(float64(vector.Y), float64(vector.X)))))
 }
 
 // DirectionFromRadians converts an angle to a vector
-func DirectionFromRadians(angle float64) Vector2 {
-	return Vector2{
+func DirectionFromRadians(angle float64) t.Vector2 {
+	return t.Vector2{
 		X: float64(RoundTo3(math.Cos(angle))),
 		Y: float64(RoundTo3(math.Sin(angle))),
 	}
@@ -233,9 +171,9 @@ func RadiansFromDegrees(degrees float64) float64 {
 }
 
 // AngleToVector converts an angle in degrees to a vector
-func DirectionFromDegrees(angleDegrees float64) Vector2 {
+func DirectionFromDegrees(angleDegrees float64) t.Vector2 {
 	angleRadians := RadiansFromDegrees(angleDegrees)
-	return Vector2{
+	return t.Vector2{
 		X: float64(RoundTo3(math.Cos(angleRadians))),
 		Y: float64(RoundTo3(math.Sin(angleRadians))),
 	}
@@ -243,38 +181,38 @@ func DirectionFromDegrees(angleDegrees float64) Vector2 {
 
 // AngleFromDirection converts a vector to an angle
 // x and y will move from -1 to 1, which shows the angle
-func AngleFromDirection(vector Vector2) float64 {
+func AngleFromDirection(vector t.Vector2) float64 {
 	return RoundTo4(float64(math.Atan2(float64(vector.Y), float64(vector.X))))
 }
 
 // AngleFromTwoDirections calculates the angle between two vectors
-func AngleFromTwoDirections(from, to Vector2) float64 {
+func AngleFromTwoDirections(from, to t.Vector2) float64 {
 	return RoundTo4(float64(math.Atan2(float64(from.Y-to.Y), float64(from.X-to.X))))
 }
 
 // AngleFromTwoDirectionsReversed calculates the angle between two vectors (reversed order)
-func AngleFromTwoDirectionsReversed(to, from Vector2) float64 {
+func AngleFromTwoDirectionsReversed(to, from t.Vector2) float64 {
 	return RoundTo4(float64(math.Atan2(float64(from.Y-to.Y), float64(from.X-to.X))))
 }
 
 // gets middle of rectangle (size/2) for rotating.
 // X and Y added to the position(upper left) of the rectangle
-func OriginFromRectangle(r image.Rectangle) Vector2 {
-	return Vector2{X: float64(r.Dx()) / 2, Y: float64(r.Dy()) / 2}
+func OriginFromRectangle(r image.Rectangle) t.Vector2 {
+	return t.Vector2{X: float64(r.Dx()) / 2, Y: float64(r.Dy()) / 2}
 }
 
-func OriginFromEbitenImage(rect *Rectangle) Vector2 {
-	return Vector2{X: float64(rect.Dx()) / 2, Y: float64(rect.Dy()) / 2}
+func OriginFromEbitenImage(rect *t.Rectangle) t.Vector2 {
+	return t.Vector2{X: float64(rect.Dx()) / 2, Y: float64(rect.Dy()) / 2}
 }
 
-// Vector2Subtract - Subtract two vectors (v1 - v2)
-func Vector2Subtract(v1, v2 Vector2) Vector2 {
-	return Vector2{X: v1.X - v2.X, Y: v1.Y - v2.Y}
+// t.Vector2Subtract - Subtract two vectors (v1 - v2)
+func Vector2Subtract(v1, v2 t.Vector2) t.Vector2 {
+	return t.Vector2{X: v1.X - v2.X, Y: v1.Y - v2.Y}
 }
 
 // CheckCollisionRecs checks collision between two rectangles
 // deprecated use rlRect.ToImageRectangle
-func RectFromRLRect(rlRect RLRectangle) image.Rectangle {
+func RectFromRLRect(rlRect t.RLRectangle) image.Rectangle {
 	min := image.Point{X: int(rlRect.X), Y: int(rlRect.Y)}
 	max := image.Point{X: int(rlRect.X + rlRect.Width), Y: int(rlRect.Y + rlRect.Height)}
 	return image.Rectangle{Min: min, Max: max}

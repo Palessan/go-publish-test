@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/palessan/go-publish-test/maf"
+	"github.com/palessan/go-publish-test/util/maf"
 )
 
 func main() {
